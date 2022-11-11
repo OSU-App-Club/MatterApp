@@ -4,4 +4,6 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_devices">Devices</string>
+    <string name="title_groups">Groups</string>
+    <string name="title_schedule">Schedule</string>
 </resources>

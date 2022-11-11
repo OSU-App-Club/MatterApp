@@ -3,28 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    android:label="@string/title_groups"
+    app:startDestination="@id/navigation_groups">
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.osuapp.matterapp.Pages.home.HomeFragment"
+        android:name="com.osuapp.matterapp.ViewsAndViewModels.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
-    <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.osuapp.matterapp.Pages.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
-
-    <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.osuapp.matterapp.Pages.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
     <fragment
         android:id="@+id/navigation_devices"
         android:name="com.osuapp.matterapp.Pages.Devices.DevicesFragment"
         android:label="@string/title_devices"
         tools:layout="@layout/fragment_devices" />
+    <fragment
+        android:id="@+id/navigation_groups"
+        android:name="com.osuapp.matterapp.Pages.Groups.GroupsFragment"
+        android:label="@string/title_groups" />
+    <fragment
+        android:id="@+id/navigation_schedule"
+        android:name="com.osuapp.matterapp.Pages.Schedule.ScheduleFragment"
+        android:label="@string/title_schedule"
+        tools:layout="@layout/fragment_schedule" />
 </navigation>
