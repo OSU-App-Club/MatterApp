@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import com.osuapp.matterapp.Pages.Page1.Page1ViewModel
 import com.osuapp.matterapp.R
 import com.osuapp.matterapp.databinding.ActivityMainBinding
 import com.osuapp.matterapp.databinding.ActivityPage1Binding

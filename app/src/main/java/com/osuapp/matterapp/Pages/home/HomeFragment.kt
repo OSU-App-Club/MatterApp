@@ -35,7 +35,7 @@ class HomeFragment : Fragment() {
             textView.text = it
         }
 
-        val button = binding.button
+        val button = binding.profileNavBtn
         button.setOnClickListener {
             // go to Page1View
             val intent = Intent(activity, MatterActivity::class.java)
