@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.osuapp.matterapp.chip
+package com.osuapp.matterapp
 
 import chip.devicecontroller.ChipClusters
 import chip.devicecontroller.ChipStructs
@@ -124,12 +124,12 @@ class ClustersHelper @Inject constructor(private val chipClient: ChipClient) {
   suspend fun readDescriptorClusterDeviceListAttribute(
       devicePtr: Long,
       endpoint: Int
-  ): List<ChipStructs.DescriptorClusterDeviceTypeStruct> {
+  ): List<ChipStructs.DescriptorClusterDeviceType> {
     return suspendCoroutine { continuation ->
       getDescriptorClusterForDevice(devicePtr, endpoint)
-          .readDeviceTypeListAttribute(
-              object : ChipClusters.DescriptorCluster.DeviceTypeListAttributeCallback {
-                override fun onSuccess(values: List<ChipStructs.DescriptorClusterDeviceTypeStruct>) {
+          .readDeviceListAttribute(
+              object : ChipClusters.DescriptorCluster.DeviceListAttributeCallback {
+                override fun onSuccess(values: List<ChipStructs.DescriptorClusterDeviceType>) {
                   continuation.resume(values)
                 }
                 override fun onError(ex: Exception) {

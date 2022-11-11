@@ -23,8 +23,8 @@ import com.google.android.gms.home.matter.commissioning.CommissioningCompleteMet
 import com.google.android.gms.home.matter.commissioning.CommissioningRequestMetadata
 import com.google.android.gms.home.matter.commissioning.CommissioningService
 import com.osuapp.matterapp.Device
-import com.osuapp.matterapp.chip.ChipClient
-import com.osuapp.matterapp.chip.ClustersHelper
+import com.osuapp.matterapp.ChipClient
+import com.osuapp.matterapp.ClustersHelper
 import com.osuapp.matterapp.convertToAppDeviceType
 import com.osuapp.matterapp.data.DevicesRepository
 import com.osuapp.matterapp.data.DevicesStateRepository

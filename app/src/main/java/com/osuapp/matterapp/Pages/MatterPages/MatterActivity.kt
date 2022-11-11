@@ -1,4 +1,4 @@
-package com.osuapp.matterapp
+package com.osuapp.matterapp.Pages.MatterPages
 
 import android.app.Activity
 import android.os.Bundle
@@ -7,15 +7,24 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.lifecycle.ViewModelProvider
+import com.osuapp.matterapp.PERIODIC_UPDATE_INTERVAL_HOME_SCREEN_SECONDS
+import com.osuapp.matterapp.Pages.home.HomeViewModel
+import com.osuapp.matterapp.TaskStatus
 import com.osuapp.matterapp.databinding.ActivityMatterBinding
+import com.osuapp.matterapp.isMultiAdminCommissioning
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MatterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMatterBinding
 
     // The ActivityResult launcher that launches the "commissionDevice" activity in Google Play services.
     private lateinit var commissionDeviceLauncher: ActivityResultLauncher<IntentSenderRequest>
-    private lateinit var viewModel: MatterActivityViewModel
+//    private lateinit var viewModel: MatterActivityViewModel
+
+    private val viewModel: MatterActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,11 +33,14 @@ class MatterActivity : AppCompatActivity() {
 
         var deviceUiModel: DeviceUiModel? = null;
         // view model setup
-        viewModel = ViewModelProvider(this).get(MatterActivityViewModel::class.java)
+
+//        viewModel = ViewModelProvider(this).get(MatterActivityViewModel::class.java)
         // Observe the devicesLiveData.
         viewModel.devicesUiModelLiveData.observe(this) { devicesUiModel: DevicesUiModel ->
             // done: Andrew - Grab one of the devices from devicesUiModel and save in variable called deviceUiModel (done)
-            deviceUiModel = devicesUiModel.devices[0]
+            if (devicesUiModel.devices.isNotEmpty()) {
+                deviceUiModel = devicesUiModel.devices[0]
+            }
         }
         // done: Zach - Uncomment code and resolve errors
 
@@ -72,11 +84,10 @@ class MatterActivity : AppCompatActivity() {
         binding.switch1.setOnClickListener {
             Timber.d("onOff switch onClickListener")
             Timber.d("onOff switch state: [${binding.switch1.isChecked}]")
-            //if(deviceUiModel != null){
-
-            //}
-            // done: Andrew - Uncomment code and resolve errors
-            viewModel.updateDeviceStateOn(deviceUiModel!!, binding.switch1.isChecked)
+            if(deviceUiModel != null){
+                // done: Andrew - Uncomment code and resolve errors
+                viewModel.updateDeviceStateOn(deviceUiModel!!, binding.switch1.isChecked)
+            }
         }
     }
 

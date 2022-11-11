@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.osuapp.matterapp.chip
+package com.osuapp.matterapp
 
 import chip.devicecontroller.ChipDeviceController
 import timber.log.Timber
@@ -58,13 +58,5 @@ abstract class BaseCompletionListener : ChipDeviceController.CompletionListener 
 
   override fun onOpCSRGenerationComplete(csr: ByteArray) {
     Timber.d("onOpCSRGenerationComplete(): csr [${csr}]")
-  }
-
-  override fun onReadCommissioningInfo(vendorId: Int, productId: Int, wifiEndpointId: Int, threadEndpointId: Int) {
-    Timber.d("onReadCommissioningInfo: vendorId [${vendorId}]  productId [${productId}]  wifiEndpointId [${wifiEndpointId}] threadEndpointId [${threadEndpointId}]")
-  }
-
-  override fun onCommissioningStatusUpdate(nodeId: Long, stage: String?, errorCode: Int) {
-    Timber.d("onCommissioningStatusUpdate nodeId [${nodeId}]  stage [${stage}]  errorCode [${errorCode}]")
   }
 }

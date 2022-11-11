@@ -1,4 +1,4 @@
-package com.osuapp.matterapp.ViewsAndViewModels.Page1
+package com.osuapp.matterapp.Pages.Page1
 
 import android.util.Log
 import androidx.lifecycle.DefaultLifecycleObserver

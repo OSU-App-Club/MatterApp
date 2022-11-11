@@ -1,4 +1,4 @@
-package com.osuapp.matterapp.ViewsAndViewModels.dashboard
+package com.osuapp.matterapp.Pages.dashboard
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

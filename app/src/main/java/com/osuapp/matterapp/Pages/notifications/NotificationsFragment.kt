@@ -1,4 +1,4 @@
-package com.osuapp.matterapp.ViewsAndViewModels.notifications
+package com.osuapp.matterapp.Pages.notifications
 
 import android.os.Bundle
 import android.view.LayoutInflater

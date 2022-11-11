@@ -63,7 +63,7 @@ android {
 }
 
 dependencies {
-// Native libs
+    // Native libs
     implementation fileTree(dir: "third_party/connectedhomeip/libs", include: ["*.jar", "*.so"])
 
     // Connected Home

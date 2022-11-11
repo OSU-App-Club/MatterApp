@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-package com.osuapp.matterapp.chip
+package com.osuapp.matterapp
 
 import android.content.Context
 import chip.devicecontroller.ChipDeviceController
-import chip.devicecontroller.ControllerParams
 import chip.devicecontroller.GetConnectedDeviceCallbackJni.GetConnectedDeviceCallback
 import chip.devicecontroller.NetworkCredentials
 import chip.devicecontroller.PaseVerifierParams
 import chip.platform.AndroidBleManager
 import chip.platform.AndroidChipPlatform
-import chip.platform.PreferencesConfigurationManager
-import chip.platform.PreferencesKeyValueStoreManager
-import chip.platform.NsdManagerServiceResolver
-import chip.platform.NsdManagerServiceBrowser
 import chip.platform.ChipMdnsCallbackImpl
 import chip.platform.DiagnosticDataProviderImpl
-
+import chip.platform.NsdManagerServiceResolver
+import chip.platform.PreferencesConfigurationManager
+import chip.platform.PreferencesKeyValueStoreManager
+import com.osuapp.matterapp.BaseCompletionListener
+import com.osuapp.matterapp.stripLinkLocalInIpAddress
 import com.osuapp.matterapp.stripLinkLocalInIpAddress
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -44,9 +43,6 @@ import timber.log.Timber
 @Singleton
 class ChipClient @Inject constructor(@ApplicationContext context: Context) {
 
-  /* 0xFFF4 is a test vendor ID, replace with your assigned company ID */
-  private val VENDOR_ID = 0xFFF4
-
   // Lazily instantiate [ChipDeviceController] and hold a reference to it.
   private val chipDeviceController: ChipDeviceController by lazy {
     ChipDeviceController.loadJni()
@@ -55,11 +51,9 @@ class ChipClient @Inject constructor(@ApplicationContext context: Context) {
         PreferencesKeyValueStoreManager(context),
         PreferencesConfigurationManager(context),
         NsdManagerServiceResolver(context),
-        NsdManagerServiceBrowser(context),
         ChipMdnsCallbackImpl(),
-        DiagnosticDataProviderImpl(context)
-    )
-    ChipDeviceController(ControllerParams.newBuilder().setUdpListenPort(0).setControllerVendorId(VENDOR_ID).build())
+        DiagnosticDataProviderImpl(context))
+    ChipDeviceController()
   }
 
   /**
@@ -117,16 +111,6 @@ class ChipClient @Inject constructor(@ApplicationContext context: Context) {
             override fun onError(error: Throwable) {
               super.onError(error)
               continuation.resumeWithException(error)
-            }
-
-            override fun onReadCommissioningInfo(vendorId: Int, productId: Int, wifiEndpointId: Int, threadEndpointId: Int) {
-              super.onReadCommissioningInfo(vendorId, productId, wifiEndpointId, threadEndpointId)
-              continuation.resume(Unit)
-            }
-
-            override fun onCommissioningStatusUpdate(nodeId: Long, stage: String?, errorCode: Int) {
-              super.onCommissioningStatusUpdate(nodeId, stage, errorCode)
-              continuation.resume(Unit)
             }
           })
 

@@ -1,4 +1,4 @@
-package com.osuapp.matterapp
+package com.osuapp.matterapp.Pages.MatterPages
 
 import android.content.ComponentName
 import android.content.Context
@@ -7,7 +7,6 @@ import android.content.IntentSender
 import androidx.activity.result.ActivityResult
 import androidx.lifecycle.*
 import com.google.android.gms.home.matter.commissioning.CommissioningResult
-import com.osuapp.matterapp.chip.ClustersHelper
 import com.osuapp.matterapp.data.DevicesRepository
 import com.osuapp.matterapp.data.DevicesStateRepository
 import com.osuapp.matterapp.data.UserPreferencesRepository
@@ -21,6 +20,7 @@ import chip.devicecontroller.ChipStructs
 import com.google.android.gms.home.matter.Matter
 import com.google.android.gms.home.matter.commissioning.CommissioningRequest
 import com.google.android.gms.home.matter.commissioning.DeviceInfo
+import com.osuapp.matterapp.*
 import com.osuapp.matterapp.commissioning.AppCommissioningService
 import kotlinx.coroutines.delay
 import java.time.LocalDateTime
@@ -54,7 +54,7 @@ data class DevicesUiModel(
 )
 
 @HiltViewModel
-class MatterActivityViewModel
+internal class MatterActivityViewModel
 @Inject
 constructor(
     private val devicesRepository: DevicesRepository,

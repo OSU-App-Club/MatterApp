@@ -1,4 +1,4 @@
-package com.osuapp.matterapp.ViewsAndViewModels.Page1
+package com.osuapp.matterapp.Pages.Page1
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

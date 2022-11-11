@@ -1,4 +1,4 @@
-package com.osuapp.matterapp.ViewsAndViewModels.home
+package com.osuapp.matterapp.Pages.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

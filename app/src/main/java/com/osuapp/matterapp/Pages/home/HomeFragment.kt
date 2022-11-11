@@ -1,4 +1,4 @@
-package com.osuapp.matterapp.ViewsAndViewModels.home
+package com.osuapp.matterapp.Pages.home
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.osuapp.matterapp.ViewsAndViewModels.Page1.Page1View
+import com.osuapp.matterapp.Pages.MatterPages.MatterActivity
 import com.osuapp.matterapp.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -38,7 +38,7 @@ class HomeFragment : Fragment() {
         val button = binding.button
         button.setOnClickListener {
             // go to Page1View
-            val intent = Intent(activity, Page1View::class.java)
+            val intent = Intent(activity, MatterActivity::class.java)
             startActivity(intent)
         }
 
