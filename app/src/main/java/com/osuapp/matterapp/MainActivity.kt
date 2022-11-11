@@ -29,6 +29,7 @@ import com.osuapp.matterapp.data.DevicesStateRepository
 import com.osuapp.matterapp.data.UserPreferencesRepository
 import kotlinx.coroutines.launch
 
+
 /** Main Activity for the "Google Home Sample App for Matter" (GHSAFM). */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -74,6 +75,7 @@ class MainActivity : AppCompatActivity() {
     // The ActivityResult launcher that launches the "commissionDevice" activity in Google Play services.
     private lateinit var commissionDeviceLauncher: ActivityResultLauncher<IntentSenderRequest>
 
+
     private lateinit var viewModel: MainActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,26 +99,29 @@ class MainActivity : AppCompatActivity() {
             }
         downloadModule(downloadModuleLauncher);
 
+        var deviceUiModel: DeviceUiModel? = null;
         // view model setup
         viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
         // Observe the devicesLiveData.
         viewModel.devicesUiModelLiveData.observe(this) { devicesUiModel: DevicesUiModel ->
-            // TODO: Andrew - Grab one of the devices from devicesUiModel and save in variable called deviceUiModel
+            // done: Andrew - Grab one of the devices from devicesUiModel and save in variable called deviceUiModel (done)
+            deviceUiModel = devicesUiModel.devices[0]
         }
-        // TODO: Zach - Uncomment code and resolve errors
-//        viewModel.commissionDeviceStatus.observe(this) { status ->
-//            Timber.d("commissionDeviceStatus.observe: status [${status}]")
-//        }
-//        viewModel.commissionDeviceIntentSender.observe(this) { sender ->
-//            Timber.d("commissionDeviceIntentSender.observe is called with sender [${sender}]")
-//            if (sender != null) {
-//                // Commission Device Step 4: Launch the activity described in the IntentSender that
-//                // was returned in Step 3 where the viewModel calls the GPS API to commission
-//                // the device.
-//                Timber.d("*** Calling commissionDeviceLauncher.launch")
-//                commissionDeviceLauncher.launch(IntentSenderRequest.Builder(sender).build())
-//            }
-//        }
+        // done: Zach - Uncomment code and resolve errors
+
+        viewModel.commissionDeviceStatus.observe(this) { status ->
+            Timber.d("commissionDeviceStatus.observe: status [${status}]")
+        }
+        viewModel.commissionDeviceIntentSender.observe(this) { sender ->
+            Timber.d("commissionDeviceIntentSender.observe is called with sender [${sender}]")
+            if (sender != null) {
+                // Commission Device Step 4: Launch the activity described in the IntentSender that
+                // was returned in Step 3 where the viewModel calls the GPS API to commission
+                // the device.
+                Timber.d("*** Calling commissionDeviceLauncher.launch")
+                commissionDeviceLauncher.launch(IntentSenderRequest.Builder(sender).build())
+            }
+        }
 
         // commission to development fabric
         commissionDeviceLauncher =
@@ -135,18 +140,20 @@ class MainActivity : AppCompatActivity() {
         // button on click listener
         binding.addDeviceButton.setOnClickListener {
             Timber.d("addDeviceButton.setOnClickListener")
-            // TODO: Zach - Uncomment code and resolve errors
-//            viewModel.stopDevicesPeriodicPing()
-//            viewModel.commissionDevice(intent, this)
+            // done: Zach - Uncomment code and resolve errors
+            viewModel.stopDevicesPeriodicPing()
+            viewModel.commissionDevice(intent, this)
         }
 
         // switch on click listener
         binding.switch1.setOnClickListener {
             Timber.d("onOff switch onClickListener")
             Timber.d("onOff switch state: [${binding.switch1.isChecked}]")
+            //if(deviceUiModel != null){
 
-            // TODO: Andrew - Uncomment code and resolve errors
-//            viewModel.updateDeviceStateOn(deviceUiModel, binding.switch1.isChecked)
+            //}
+            // done: Andrew - Uncomment code and resolve errors
+            viewModel.updateDeviceStateOn(deviceUiModel!!, binding.switch1.isChecked)
         }
     }
 
@@ -155,29 +162,29 @@ class MainActivity : AppCompatActivity() {
         Timber.d("onResume()")
 
         val intent = intent
-        // TODO: Zach - Uncomment code and resolve errors
-//        if (isMultiAdminCommissioning(intent)) {
-//            Timber.d("*** MultiAdminCommissioning ***")
-//            if (viewModel.commissionDeviceStatus.value == TaskStatus.NotStarted) {
-//                Timber.d("TaskStatus.NotStarted so starting commissioning")
-//                viewModel.commissionDevice(intent, this)
-//            } else {
-//                Timber.d("TaskStatus is not NotStarted: ${viewModel.commissionDeviceStatus.value}")
-//            }
-//        } else {
-//            Timber.d("*** Main ***")
-//            if (PERIODIC_UPDATE_INTERVAL_HOME_SCREEN_SECONDS != -1) {
-//                Timber.d("Starting periodic ping on devices")
-//                viewModel.startDevicesPeriodicPing()
-//            }
-//        }
+        // done: Zach - Uncomment code and resolve errors
+        if (isMultiAdminCommissioning(intent)) {
+            Timber.d("*** MultiAdminCommissioning ***")
+            if (viewModel.commissionDeviceStatus.value == TaskStatus.NotStarted) {
+                Timber.d("TaskStatus.NotStarted so starting commissioning")
+                viewModel.commissionDevice(intent, this)
+            } else {
+                Timber.d("TaskStatus is not NotStarted: ${viewModel.commissionDeviceStatus.value}")
+            }
+        } else {
+            Timber.d("*** Main ***")
+            if (PERIODIC_UPDATE_INTERVAL_HOME_SCREEN_SECONDS != -1) {
+                Timber.d("Starting periodic ping on devices")
+                viewModel.startDevicesPeriodicPing()
+            }
+        }
     }
 
     override fun onPause() {
         super.onPause()
         Timber.d("onPause(): Stopping periodic ping on devices")
-        // TODO: Zach - Uncomment code and resolve errors
-//        viewModel.stopDevicesPeriodicPing()
+        // done: Zach - Uncomment code and resolve errors
+        viewModel.stopDevicesPeriodicPing()
     }
 
 }

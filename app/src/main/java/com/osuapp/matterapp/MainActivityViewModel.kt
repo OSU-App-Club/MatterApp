@@ -1,9 +1,11 @@
 package com.osuapp.matterapp
 
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.IntentSender
 import androidx.activity.result.ActivityResult
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.google.android.gms.home.matter.commissioning.CommissioningResult
 import com.osuapp.matterapp.chip.ClustersHelper
 import com.osuapp.matterapp.data.DevicesRepository
@@ -14,6 +16,14 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
+import chip.devicecontroller.ChipClusters
+import chip.devicecontroller.ChipStructs
+import com.google.android.gms.home.matter.Matter
+import com.google.android.gms.home.matter.commissioning.CommissioningRequest
+import com.google.android.gms.home.matter.commissioning.DeviceInfo
+import com.osuapp.matterapp.commissioning.AppCommissioningService
+import kotlinx.coroutines.delay
+import java.time.LocalDateTime
 
 /**
  * Encapsulates all of the information on a specific device. Note that the app currently only
@@ -48,6 +58,7 @@ internal class MainActivityViewModel
 @Inject
 constructor(
     private val devicesRepository: DevicesRepository,
+    private var devicesPeriodicPingEnabled: Boolean = true, //might not supposed to be here
     private val devicesStateRepository: DevicesStateRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
     private val clustersHelper: ClustersHelper,
@@ -98,6 +109,13 @@ constructor(
     }
 
     // MARK: - Commissioning
+    private val _commissionDeviceStatus = MutableLiveData<TaskStatus>(TaskStatus.NotStarted)
+    val commissionDeviceStatus: LiveData<TaskStatus>
+        get() = _commissionDeviceStatus
+
+    private val _commissionDeviceIntentSender = MutableLiveData<IntentSender?>()
+    val commissionDeviceIntentSender: LiveData<IntentSender?>
+        get() = _commissionDeviceIntentSender
 
     // Called by the fragment in Step 5 of the Device Commissioning flow.
     fun commissionDeviceSucceeded(activityResult: ActivityResult, message: String) {
@@ -128,8 +146,8 @@ constructor(
                 if (result.deviceName != null) updatedDeviceBuilder.name = result.deviceName
                 if (roomName != null) updatedDeviceBuilder.room = roomName
                 devicesRepository.updateDevice(updatedDeviceBuilder.build())
-                // TODO: Zach - Uncomment code and resolve errors
-//                _commissionDeviceStatus.postValue(TaskStatus.Completed(message))
+                // done: Zach - Uncomment code and resolve errors
+                _commissionDeviceStatus.postValue(TaskStatus.Completed(message))
             } catch (e: Exception) {
                 Timber.e(e)
             }
@@ -138,15 +156,103 @@ constructor(
 
     // Called by the fragment in Step 5 of the Device Commissioning flow.
     fun commissionDeviceFailed(message: String) {
-        // TODO: Zach - Uncomment code and resolve errors
-//        _commissionDeviceStatus.postValue(TaskStatus.Failed(Throwable(message)))
+        // done: Zach - Uncomment code and resolve errors
+        _commissionDeviceStatus.postValue(TaskStatus.Failed(Throwable(message)))
+    }
+    fun stopDevicesPeriodicPing() {
+        devicesPeriodicPingEnabled = false
+    }
+
+    fun commissionDevice(intent: Intent, context: Context) {
+        Timber.d("commissionDevice")
+        _commissionDeviceStatus.postValue(TaskStatus.InProgress)
+
+        val isMultiAdminCommissioning = isMultiAdminCommissioning(intent)
+
+        val commissionRequestBuilder =
+            CommissioningRequest.builder()
+                .setCommissioningService(ComponentName(context, AppCommissioningService::class.java))
+        if (isMultiAdminCommissioning) {
+            val deviceName = intent.getStringExtra("com.google.android.gms.home.matter.EXTRA_DEVICE_NAME")
+            commissionRequestBuilder.setDeviceNameHint(deviceName)
+
+            val vendorId = intent.getIntExtra("com.google.android.gms.home.matter.EXTRA_VENDOR_ID", -1)
+            val productId = intent.getIntExtra("com.google.android.gms.home.matter.EXTRA_PRODUCT_ID", -1)
+            val deviceType =
+                intent.getIntExtra("com.google.android.gms.home.matter.EXTRA_DEVICE_Type", -1)
+            val deviceInfo = DeviceInfo.builder().setProductId(productId).setVendorId(vendorId).build()
+            commissionRequestBuilder.setDeviceInfo(deviceInfo)
+
+            val manualPairingCode =
+                intent.getStringExtra("com.google.android.gms.home.matter.EXTRA_MANUAL_PAIRING_CODE")
+            commissionRequestBuilder.setOnboardingPayload(manualPairingCode)
+        }
+        val commissioningRequest = commissionRequestBuilder.build()
+
+        Matter.getCommissioningClient(context)
+            .commissionDevice(commissioningRequest)
+            .addOnSuccessListener { result ->
+                // Communication with fragment is via livedata
+                _commissionDeviceStatus.postValue(TaskStatus.InProgress)
+                _commissionDeviceIntentSender.postValue(result)
+            }
+            .addOnFailureListener { error ->
+                _commissionDeviceStatus.postValue(TaskStatus.Failed(error))
+                Timber.e(error)
+            }
     }
 
 
 
-    // MARK: - State control
+    fun startDevicesPeriodicPing() {
+        Timber.d(
+            "${LocalDateTime.now()} startDevicesPeriodicPing every $PERIODIC_UPDATE_INTERVAL_HOME_SCREEN_SECONDS seconds")
+        devicesPeriodicPingEnabled = true
+        runDevicesPeriodicPing()
+    }
 
+    private fun runDevicesPeriodicPing() {
+        viewModelScope.launch {
+            while (devicesPeriodicPingEnabled) {
+                // For each ne of the real devices
+                val devicesList = devicesRepository.getAllDevices().devicesList
+                devicesList.forEach { device ->
+                    if (device.name.startsWith(DUMMY_DEVICE_NAME_PREFIX)) {
+                        return@forEach
+                    }
+                    Timber.d("runDevicesPeriodicPing deviceId [${device.deviceId}]")
+                    var isOn = clustersHelper.getDeviceStateOnOffCluster(device.deviceId, 1)
+                    val isOnline: Boolean
+                    if (isOn == null) {
+                        Timber.e("runDevicesPeriodicUpdate: flakiness with mDNS")
+                        isOn = false
+                        isOnline = false
+                    } else {
+                        isOnline = true
+                    }
+                    Timber.d("runDevicesPeriodicPing deviceId [${device.deviceId}] [${isOnline}] [${isOn}]")
+                    // done: only need to do it if state has changed
+                    devicesStateRepository.updateDeviceState(
+                        device.deviceId, isOnline = isOnline, isOn = isOn
+                    )
+                }
+                delay(PERIODIC_UPDATE_INTERVAL_HOME_SCREEN_SECONDS * 1000L)
+            }
+        }
+    }
+
+    // MARK: - State control
     fun updateDeviceStateOn(deviceUiModel: DeviceUiModel, isOn: Boolean) {
-        // TODO: Andrew - Copy correct code into here
+        Timber.d("updateDeviceStateOn: Device [${deviceUiModel}]  isOn [${isOn}]")
+        viewModelScope.launch {
+            if (isDummyDevice(deviceUiModel.device.name)) {
+                Timber.d("Handling test device")
+                devicesStateRepository.updateDeviceState(deviceUiModel.device.deviceId, true, isOn)
+            } else {
+                Timber.d("Handling real device")
+                clustersHelper.setOnOffDeviceStateOnOffCluster(deviceUiModel.device.deviceId, isOn, 1)
+                devicesStateRepository.updateDeviceState(deviceUiModel.device.deviceId, true, isOn)
+            }
+        }
     }
 }
