@@ -54,15 +54,17 @@ data class DevicesUiModel(
 )
 
 @HiltViewModel
-internal class MatterActivityViewModel
+class MatterActivityViewModel
 @Inject
 constructor(
     private val devicesRepository: DevicesRepository,
-    private var devicesPeriodicPingEnabled: Boolean = true, //might not supposed to be here
     private val devicesStateRepository: DevicesStateRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
     private val clustersHelper: ClustersHelper,
 ): ViewModel() {
+    // Controls whether a periodic ping to the devices is enabled or not.
+    private var devicesPeriodicPingEnabled: Boolean = true
+
     // MARK: - Get list of devices stored in account
 
     private val devicesFlow = devicesRepository.devicesFlow
