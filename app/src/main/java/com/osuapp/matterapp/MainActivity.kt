@@ -20,7 +20,7 @@ import timber.log.Timber
 
 /** Main Activity for the "Google Home Sample App for Matter" (GHSAFM). */
 @AndroidEntryPoint
-class MainActivity0 : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var downloadModuleLauncher: ActivityResultLauncher<IntentSenderRequest>
