@@ -44,7 +44,7 @@ data class DevicesUiModel(
 )
 
 @HiltViewModel
-internal class MainActivityViewModel
+internal class MatterActivityViewModel
 @Inject
 constructor(
     private val devicesRepository: DevicesRepository,
