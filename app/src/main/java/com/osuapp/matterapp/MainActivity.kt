@@ -1,34 +1,22 @@
 package com.osuapp.matterapp
 
-import android.app.Activity
 import android.os.Bundle
-import timber.log.Timber
-import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil.setContentView
-import dagger.hilt.android.AndroidEntryPoint
-import com.osuapp.matterapp.R
-import com.osuapp.matterapp.databinding.ActivityMainBinding
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
-import androidx.activity.viewModels
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.common.moduleinstall.ModuleInstall
 import com.google.android.gms.common.moduleinstall.ModuleInstallClient
 import com.google.android.gms.home.matter.Matter
-import com.google.android.gms.home.matter.commissioning.CommissioningResult
-import com.google.android.material.switchmaterial.SwitchMaterial
-import com.osuapp.matterapp.chip.ClustersHelper
-import com.osuapp.matterapp.data.DevicesRepository
-import com.osuapp.matterapp.data.DevicesStateRepository
-import com.osuapp.matterapp.data.UserPreferencesRepository
-import kotlinx.coroutines.launch
-
+import com.osuapp.matterapp.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 /** Main Activity for the "Google Home Sample App for Matter" (GHSAFM). */
 @AndroidEntryPoint
@@ -72,14 +60,9 @@ class MainActivity : AppCompatActivity() {
             unknown = "unknown")
     }
 
-    // The ActivityResult launcher that launches the "commissionDevice" activity in Google Play services.
-    private lateinit var commissionDeviceLauncher: ActivityResultLauncher<IntentSenderRequest>
-
-
-    private lateinit var viewModel: MainActivityViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -89,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         initContextDependentConstants()
 
         downloadModuleLauncher =
-            registerForActivityResult<IntentSenderRequest, ActivityResult>(StartIntentSenderForResult()) { result ->
+            registerForActivityResult<IntentSenderRequest, ActivityResult>(ActivityResultContracts.StartIntentSenderForResult()) { result ->
                 val resultCode = result.getResultCode()
                 if (resultCode == RESULT_OK) {
                     Timber.i("Home Module Install download complete")
@@ -99,92 +82,17 @@ class MainActivity : AppCompatActivity() {
             }
         downloadModule(downloadModuleLauncher);
 
-        var deviceUiModel: DeviceUiModel? = null;
-        // view model setup
-        viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
-        // Observe the devicesLiveData.
-        viewModel.devicesUiModelLiveData.observe(this) { devicesUiModel: DevicesUiModel ->
-            // done: Andrew - Grab one of the devices from devicesUiModel and save in variable called deviceUiModel (done)
-            deviceUiModel = devicesUiModel.devices[0]
-        }
-        // done: Zach - Uncomment code and resolve errors
+        val navView: BottomNavigationView = binding.navView
 
-        viewModel.commissionDeviceStatus.observe(this) { status ->
-            Timber.d("commissionDeviceStatus.observe: status [${status}]")
-        }
-        viewModel.commissionDeviceIntentSender.observe(this) { sender ->
-            Timber.d("commissionDeviceIntentSender.observe is called with sender [${sender}]")
-            if (sender != null) {
-                // Commission Device Step 4: Launch the activity described in the IntentSender that
-                // was returned in Step 3 where the viewModel calls the GPS API to commission
-                // the device.
-                Timber.d("*** Calling commissionDeviceLauncher.launch")
-                commissionDeviceLauncher.launch(IntentSenderRequest.Builder(sender).build())
-            }
-        }
-
-        // commission to development fabric
-        commissionDeviceLauncher =
-            registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
-                // Commission Device Step 5.
-                // The Commission Device activity in GPS has completed.
-                val resultCode = result.resultCode
-                Timber.d("GOT result for commissioningLauncher: resultCode [${resultCode}]")
-                if (resultCode == Activity.RESULT_OK) {
-                    viewModel.commissionDeviceSucceeded(result, "Commissioning succeeded")
-                } else {
-                    viewModel.commissionDeviceFailed("Commissioning failed ${resultCode}")
-                }
-            }
-
-        // button on click listener
-        binding.addDeviceButton.setOnClickListener {
-            Timber.d("addDeviceButton.setOnClickListener")
-            // done: Zach - Uncomment code and resolve errors
-            viewModel.stopDevicesPeriodicPing()
-            viewModel.commissionDevice(intent, this)
-        }
-
-        // switch on click listener
-        binding.switch1.setOnClickListener {
-            Timber.d("onOff switch onClickListener")
-            Timber.d("onOff switch state: [${binding.switch1.isChecked}]")
-            //if(deviceUiModel != null){
-
-            //}
-            // done: Andrew - Uncomment code and resolve errors
-            viewModel.updateDeviceStateOn(deviceUiModel!!, binding.switch1.isChecked)
-        }
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
+            )
+        )
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        navView.setupWithNavController(navController)
     }
-
-    override fun onResume() {
-        super.onResume()
-        Timber.d("onResume()")
-
-        val intent = intent
-        // done: Zach - Uncomment code and resolve errors
-        if (isMultiAdminCommissioning(intent)) {
-            Timber.d("*** MultiAdminCommissioning ***")
-            if (viewModel.commissionDeviceStatus.value == TaskStatus.NotStarted) {
-                Timber.d("TaskStatus.NotStarted so starting commissioning")
-                viewModel.commissionDevice(intent, this)
-            } else {
-                Timber.d("TaskStatus is not NotStarted: ${viewModel.commissionDeviceStatus.value}")
-            }
-        } else {
-            Timber.d("*** Main ***")
-            if (PERIODIC_UPDATE_INTERVAL_HOME_SCREEN_SECONDS != -1) {
-                Timber.d("Starting periodic ping on devices")
-                viewModel.startDevicesPeriodicPing()
-            }
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Timber.d("onPause(): Stopping periodic ping on devices")
-        // done: Zach - Uncomment code and resolve errors
-        viewModel.stopDevicesPeriodicPing()
-    }
-
 }

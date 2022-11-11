@@ -22,6 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MatterApp"
         tools:targetApi="31">
+
         <activity
             android:name="com.osuapp.matterapp.MainActivity"
             android:exported="true">
@@ -29,14 +30,29 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".Pages.MatterPages.MatterActivity"
+            android:parentActivityName=".Pages.MatterPages.MatterActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="com.google.android.gms.home.matter.ACTION_COMMISSION_DEVICE"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".Pages.Page1.Page1View"
+            android:parentActivityName=".Pages.Page1.Page1View"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
         <service
-            android:name="com.osuapp.matterapp.Matter.commissioning.AppCommissioningService"
+            android:name=".Shared.Matter.commissioning.AppCommissioningService"
             android:exported="true"
             />
 
