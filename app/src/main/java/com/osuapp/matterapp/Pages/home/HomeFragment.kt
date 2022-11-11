@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.osuapp.matterapp.ViewsAndViewModels.Page1.Page1View
+import com.osuapp.matterapp.Pages.Profile.ProfileActivity
 import com.osuapp.matterapp.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -35,10 +35,10 @@ class HomeFragment : Fragment() {
             textView.text = it
         }
 
-        val button = binding.button
+        val button = binding.profileNavBtn
         button.setOnClickListener {
-            // go to Page1View
-            val intent = Intent(activity, Page1View::class.java)
+            // Go to Profile Page
+            val intent = Intent(activity, ProfileActivity::class.java)
             startActivity(intent)
         }
 

@@ -6,4 +6,6 @@
     <string name="title_devices">Devices</string>
     <string name="title_groups">Groups</string>
     <string name="title_schedule">Schedule</string>
+
+    <string name="title_profile">Profile</string>
 </resources>
