@@ -2,6 +2,7 @@ package com.osuapp.matterapp.Pages.MatterPages
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import timber.log.Timber
 import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.result.ActivityResultLauncher
@@ -39,6 +40,7 @@ class MatterActivity : AppCompatActivity() {
         viewModel.devicesUiModelLiveData.observe(this) { devicesUiModel: DevicesUiModel ->
             // done: Andrew - Grab one of the devices from devicesUiModel and save in variable called deviceUiModel (done)
             if (devicesUiModel.devices.isNotEmpty()) {
+                Timber.i("devicesUiModel.devices is not empty: ${devicesUiModel.devices.count()}")
                 deviceUiModel = devicesUiModel.devices[0]
             }
         }

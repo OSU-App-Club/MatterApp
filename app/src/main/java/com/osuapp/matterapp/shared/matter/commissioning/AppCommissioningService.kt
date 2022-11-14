@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.osuapp.matterapp.commissioning
+package com.osuapp.matterapp.shared.matter.commissioning
 
 import android.app.Service
 import android.content.Intent
@@ -23,11 +23,11 @@ import com.google.android.gms.home.matter.commissioning.CommissioningCompleteMet
 import com.google.android.gms.home.matter.commissioning.CommissioningRequestMetadata
 import com.google.android.gms.home.matter.commissioning.CommissioningService
 import com.osuapp.matterapp.Device
-import com.osuapp.matterapp.ChipClient
-import com.osuapp.matterapp.ClustersHelper
+import com.osuapp.matterapp.shared.matter.chip.ChipClient
+import com.osuapp.matterapp.shared.matter.chip.ClustersHelper
+import com.osuapp.matterapp.shared.matter.data.DevicesRepository
+import com.osuapp.matterapp.shared.matter.data.DevicesStateRepository
 import com.osuapp.matterapp.convertToAppDeviceType
-import com.osuapp.matterapp.data.DevicesRepository
-import com.osuapp.matterapp.data.DevicesStateRepository
 import com.osuapp.matterapp.getTimestampForNow
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.osuapp.matterapp
+package com.osuapp.matterapp.shared.matter.chip
 
 import android.content.Context
 import chip.devicecontroller.ChipDeviceController
@@ -28,8 +28,6 @@ import chip.platform.DiagnosticDataProviderImpl
 import chip.platform.NsdManagerServiceResolver
 import chip.platform.PreferencesConfigurationManager
 import chip.platform.PreferencesKeyValueStoreManager
-import com.osuapp.matterapp.BaseCompletionListener
-import com.osuapp.matterapp.stripLinkLocalInIpAddress
 import com.osuapp.matterapp.stripLinkLocalInIpAddress
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject

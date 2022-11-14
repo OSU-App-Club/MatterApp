@@ -7,21 +7,20 @@ import android.content.IntentSender
 import androidx.activity.result.ActivityResult
 import androidx.lifecycle.*
 import com.google.android.gms.home.matter.commissioning.CommissioningResult
-import com.osuapp.matterapp.data.DevicesRepository
-import com.osuapp.matterapp.data.DevicesStateRepository
-import com.osuapp.matterapp.data.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
-import chip.devicecontroller.ChipClusters
-import chip.devicecontroller.ChipStructs
 import com.google.android.gms.home.matter.Matter
 import com.google.android.gms.home.matter.commissioning.CommissioningRequest
 import com.google.android.gms.home.matter.commissioning.DeviceInfo
 import com.osuapp.matterapp.*
-import com.osuapp.matterapp.commissioning.AppCommissioningService
+import com.osuapp.matterapp.shared.matter.chip.ClustersHelper
+import com.osuapp.matterapp.shared.matter.commissioning.AppCommissioningService
+import com.osuapp.matterapp.shared.matter.data.DevicesRepository
+import com.osuapp.matterapp.shared.matter.data.DevicesStateRepository
+import com.osuapp.matterapp.shared.matter.data.UserPreferencesRepository
 import kotlinx.coroutines.delay
 import java.time.LocalDateTime
 

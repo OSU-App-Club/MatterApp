@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.osuapp.matterapp
+package com.osuapp.matterapp.shared.matter.chip
 
 import chip.devicecontroller.ChipDeviceController
 import timber.log.Timber

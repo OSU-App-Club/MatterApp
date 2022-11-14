@@ -52,9 +52,8 @@
             tools:ignore="LockedOrientationActivity" />
 
         <service
-            android:name=".Shared.Matter.commissioning.AppCommissioningService"
-            android:exported="true"
-            />
+            android:name="com.osuapp.matterapp.shared.matter.commissioning.AppCommissioningService"
+            android:exported="true" />
 
         <service android:name="com.google.android.gms.metadata.ModuleDependencies"
             android:enabled="false"

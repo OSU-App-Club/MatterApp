@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.osuapp.matterapp.data
+package com.osuapp.matterapp.shared.matter.data
 
 import android.content.Context
 import com.osuapp.matterapp.Device

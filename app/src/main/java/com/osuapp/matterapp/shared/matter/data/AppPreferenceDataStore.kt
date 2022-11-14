@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.osuapp.matterapp.data
+package com.osuapp.matterapp.shared.matter.data
 
 import androidx.preference.PreferenceDataStore
 import com.osuapp.matterapp.stringToBoolean
