@@ -1,4 +1,4 @@
-package Shared.Models
+package shared.Models
 
 import android.util.Log
 import com.google.gson.Gson
