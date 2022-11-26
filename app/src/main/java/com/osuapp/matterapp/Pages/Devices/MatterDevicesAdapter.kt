@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.osuapp.matterapp.R
+import timber.log.Timber
 
 class MatterDevicesAdapter(var devices : List<MatterDeviceViewModel.DevicesListItem>)
     : RecyclerView.Adapter<MatterDevicesAdapter.ViewHolder>() {
@@ -45,6 +46,8 @@ class MatterDevicesAdapter(var devices : List<MatterDeviceViewModel.DevicesListI
             // TODO: Setup specific devices editor page
             // launch DevicesEditor activity
             val intent = Intent(holder.itemView.context, DevicesEditorActivity::class.java)
+            intent.putExtra("deviceId", device.id)
+//            Timber.i("Sending Device ID: ${device.id}")
             holder.itemView.context.startActivity(intent)
 //            holder.itemView.findNavController().navigate(R.id.action_navigation_devices_to_devicesEditorFragment)
         }
