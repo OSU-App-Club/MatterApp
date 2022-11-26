@@ -30,14 +30,6 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <activity
-            android:name="com.osuapp.matterapp.Pages.MatterPages.MatterActivity"
-            android:parentActivityName="com.osuapp.matterapp.Pages.MatterPages.MatterActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="com.google.android.gms.home.matter.ACTION_COMMISSION_DEVICE"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -45,9 +37,9 @@
         </activity>
 
         <activity
-            android:name="com.osuapp.matterapp.Pages.Page1.Page1View"
-            android:parentActivityName="com.osuapp.matterapp.Pages.Page1.Page1View"
+            android:name="com.osuapp.matterapp.Pages.DevicesEditor.DevicesEditorActivity"
             android:exported="false"
+            android:parentActivityName="com.osuapp.matterapp.Pages.DevicesEditor.DevicesEditorActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
 

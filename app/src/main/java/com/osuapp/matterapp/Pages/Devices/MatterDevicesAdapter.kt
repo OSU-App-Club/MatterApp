@@ -1,5 +1,7 @@
 package com.osuapp.matterapp.Pages.Devices
 
+import com.osuapp.matterapp.Pages.DevicesEditor.DevicesEditorActivity
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,6 +43,9 @@ class MatterDevicesAdapter(var devices : List<MatterDeviceViewModel.DevicesListI
         // Setup onClick interaction to Devices Editor page
         holder.itemView.setOnClickListener {
             // TODO: Setup specific devices editor page
+            // launch DevicesEditor activity
+            val intent = Intent(holder.itemView.context, DevicesEditorActivity::class.java)
+            holder.itemView.context.startActivity(intent)
 //            holder.itemView.findNavController().navigate(R.id.action_navigation_devices_to_devicesEditorFragment)
         }
     }

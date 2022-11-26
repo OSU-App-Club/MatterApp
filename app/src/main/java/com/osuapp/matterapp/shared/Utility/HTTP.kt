@@ -28,18 +28,18 @@ interface CatApiService {
     @GET("devices")
     fun getDevices(): Deferred<String>;
 
-    @POST("/devices")
+    @POST("devices")
     @Headers("Content-Type: application/json")
-    fun postDevices(@Body device: RequestBody): Deferred<Response<Unit>>;
+    fun addDevice(@Body device: RequestBody): Deferred<String>;
 
-    @GET("/devices/{deviceid}")
+    @GET("devices/{deviceid}")
     fun getDeviceById(@Path("deviceid") id: String): Deferred<String>;
 
-    @PUT("/devices/{deviceid}")
+    @PUT("devices/{deviceid}")
     @Headers("Content-Type: application/json")
     fun updateDeviceById(@Path("deviceid") id: String, @Body device: RequestBody): Deferred<Response<Unit>>;
 
-    @DELETE("/devices/{deviceid}")
+    @DELETE("devices/{deviceid}")
     fun deleteDeviceById(@Path("deviceid") id: String): Deferred<String>;
 }
 
