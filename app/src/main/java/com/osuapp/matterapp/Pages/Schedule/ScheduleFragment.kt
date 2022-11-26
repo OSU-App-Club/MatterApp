@@ -25,11 +25,11 @@ class ScheduleFragment : Fragment() {
         _binding = FragmentScheduleBinding.inflate(inflater, container, false)
 
         val root: View = _binding.root
-        val textView: TextView = _binding.groupsTitleText
-
-        matterScheduleViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
+//        val textView: TextView = _binding.groupsTitleText
+//
+//        matterScheduleViewModel.text.observe(viewLifecycleOwner) {
+//            textView.text = it
+//        }
 
         return root
     }

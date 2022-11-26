@@ -7,16 +7,42 @@
     tools:context=".Pages.Schedule.ScheduleFragment">
 
     <TextView
-        android:id="@+id/groups_title_text"
+        android:id="@+id/scheduleTextHeader"
+        android:layout_width="257dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/title_schedule"
+        android:textAlignment="viewStart"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/schedulesList"
+        android:layout_width="404dp"
+        android:layout_height="459dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_width="match_parent"
+        app:layout_constraintTop_toBottomOf="@+id/scheduleTextHeader"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addSchedulesBtn"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/title_groups"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        tools:layout_editor_absoluteX="8dp" />
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:clickable="true"
+        android:contentDescription="@string/title_schedule"
+        android:src="@android:drawable/ic_input_add"
+        app:layout_constraintBottom_toBottomOf="@+id/schedulesList"
+        app:layout_constraintEnd_toEndOf="@+id/schedulesList" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

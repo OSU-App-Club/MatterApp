@@ -25,11 +25,11 @@ class GroupsFragment : Fragment() {
         _binding = FragmentGroupsBinding.inflate(inflater, container, false)
 
         val root: View = _binding.root
-        val textView: TextView = _binding.groupsTitleText
+//        val textView: TextView = _binding.groupsTitleText
 
-        matterGroupsViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
+//        matterGroupsViewModel.text.observe(viewLifecycleOwner) {
+//            textView.text = it
+//        }
 
         return root
     }
