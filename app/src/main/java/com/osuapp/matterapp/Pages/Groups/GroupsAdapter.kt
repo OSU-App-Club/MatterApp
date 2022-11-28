@@ -1,4 +1,4 @@
-package com.osuapp.matterapp.Pages.Devices
+package com.osuapp.matterapp.Pages.Groups
 
 import com.osuapp.matterapp.Pages.DevicesEditor.DevicesEditorActivity
 import android.content.Intent
@@ -10,11 +10,9 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.osuapp.matterapp.R
-import com.osuapp.matterapp.TaskStatus
-import timber.log.Timber
 
-class MatterDevicesAdapter(var devices : List<MatterDeviceViewModel.DevicesListItem>)
-    : RecyclerView.Adapter<MatterDevicesAdapter.ViewHolder>() {
+class GroupsAdapter(var devices : List<GroupsViewModel.DevicesListItem>)
+    : RecyclerView.Adapter<GroupsAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val cardView: CardView
@@ -52,7 +50,7 @@ class MatterDevicesAdapter(var devices : List<MatterDeviceViewModel.DevicesListI
             android.graphics.Color.parseColor("#B0B1B1")
         })
         holder.label.text = device.label
-        holder.state.text = if (device.state) "ON" else "OFF"
+        holder.state.text = if (device.state) "On" else "Off"
         holder.image.setImageResource(device.image)
 
         // Setup onClick interaction to Devices Editor page

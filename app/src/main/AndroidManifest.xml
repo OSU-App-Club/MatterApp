@@ -43,6 +43,20 @@
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
 
+        <activity
+            android:name="com.osuapp.matterapp.Pages.GroupsEditor.GroupsEditorActivity"
+            android:exported="false"
+            android:parentActivityName="com.osuapp.matterapp.Pages.GroupsEditor.GroupsEditorActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
+        <activity
+            android:name="com.osuapp.matterapp.Pages.GroupsEditorPart2.GroupsEditorActivityPart2"
+            android:exported="false"
+            android:parentActivityName="com.osuapp.matterapp.Pages.GroupsEditorPart2.GroupsEditorActivityPart2"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
         <service
             android:name="com.osuapp.matterapp.shared.matter.commissioning.AppCommissioningService"
             android:exported="true" />

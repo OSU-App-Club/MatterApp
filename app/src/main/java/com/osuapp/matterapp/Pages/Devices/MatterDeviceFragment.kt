@@ -78,6 +78,7 @@ class MatterDeviceFragment : Fragment() {
                 Timber.i("devicesUiModel.devices is empty")
             }
 
+            matterDeviceViewModel.updateDeviceStates(devicesUiModel.devices)
             matterDeviceViewModel.addDevice(devicesUiModel.devices)
         }
         viewModel.commissionDeviceStatus.observe(viewLifecycleOwner) { status ->

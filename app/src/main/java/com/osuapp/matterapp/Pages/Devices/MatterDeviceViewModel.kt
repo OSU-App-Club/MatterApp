@@ -12,6 +12,7 @@ import org.json.JSONObject
 import shared.Models.Device
 import shared.Utility.CatApi
 import timber.log.Timber
+import java.nio.file.Files.find
 
 
 class MatterDeviceViewModel : ViewModel(), DefaultLifecycleObserver {
@@ -35,11 +36,15 @@ class MatterDeviceViewModel : ViewModel(), DefaultLifecycleObserver {
     class DevicesListItem {
         var id: String = ""
         var label: String = ""
+        var state: Boolean = false
+        var online: Boolean = false
         var image: Int = -1
 
-        constructor(id: String, label: String, image: Int) {
+        constructor(id: String, label: String, state: Boolean, online: Boolean, image: Int) {
             this.id = id
             this.label = label
+            this.state = state
+            this.online = online
             this.image = image
         }
 
@@ -74,7 +79,7 @@ class MatterDeviceViewModel : ViewModel(), DefaultLifecycleObserver {
                 val mutableDevicesList = mutableListOf<DevicesListItem>()
                 devicesList.forEach {
                     // TODO: The structure of DeviceListItem might be wrong?
-                    mutableDevicesList.add(DevicesListItem(it.getDeviceId(), it.getDeviceName(), R.drawable.ic_std_device))
+                    mutableDevicesList.add(DevicesListItem(it.getDeviceId(), it.getDeviceName(), false, false, R.drawable.ic_baseline_outlet_24))
                 }
 
                 // Send event to update Devices View
@@ -86,6 +91,25 @@ class MatterDeviceViewModel : ViewModel(), DefaultLifecycleObserver {
             } catch (e : Exception) {
                 e.printStackTrace()
                 Log.e(_TAG, "Async getDevices failed: ${e.localizedMessage}")
+            }
+        }
+    }
+
+    fun updateDeviceStates(matterDevices: List<DeviceUiModel>) {
+        coroutineScope.launch {
+            while(!loadedList) {
+                delay(1000)
+            }
+
+            for (matterDevice in matterDevices) {
+                val device = _devices.value!!.find { it.id == matterDevice.device.deviceId.toString() }
+                if (device != null) {
+                    device.state = matterDevice.isOn
+                    device.online = matterDevice.isOnline
+                }
+
+                // update _devices
+                _devices.postValue(_devices.value)
             }
         }
     }
@@ -141,7 +165,7 @@ class MatterDeviceViewModel : ViewModel(), DefaultLifecycleObserver {
                             devicesList.add(Device(json))
                             val mutableDevicesList = mutableListOf<DevicesListItem>()
                             devicesList.forEach {
-                                mutableDevicesList.add(DevicesListItem(it.getDeviceId(), it.getDeviceName(), R.drawable.ic_std_device))
+                                mutableDevicesList.add(DevicesListItem(it.getDeviceId(), it.getDeviceName(), matterDevice.isOn, matterDevice.isOnline, R.drawable.ic_std_device))
                             }
 
                             // Send event to update Devices View

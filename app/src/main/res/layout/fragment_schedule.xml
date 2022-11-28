@@ -7,42 +7,52 @@
     tools:context=".Pages.Schedule.ScheduleFragment">
 
     <TextView
-        android:id="@+id/scheduleTextHeader"
-        android:layout_width="257dp"
-        android:layout_height="38dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:id="@+id/matter_devices_text_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
         android:text="@string/title_schedule"
         android:textAlignment="viewStart"
-        android:textSize="20sp"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/title_schedule" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/schedulesList"
-        android:layout_width="404dp"
-        android:layout_height="459dp"
+        android:id="@+id/schedule_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
+        android:background="#A1FFFFFF"
+        android:nestedScrollingEnabled="false"
+        app:layoutManager="GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scheduleTextHeader"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/matter_devices_text_header"
+        app:spanCount="1"
+        tools:itemCount="3"
+        tools:listitem="@layout/schedule_list_item" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addSchedulesBtn"
+        android:id="@+id/add_devices_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:clickable="true"
-        android:contentDescription="@string/title_schedule"
+        android:contentDescription="@string/add_a_new_device"
+        android:focusable="true"
         android:src="@android:drawable/ic_input_add"
-        app:layout_constraintBottom_toBottomOf="@+id/schedulesList"
-        app:layout_constraintEnd_toEndOf="@+id/schedulesList" />
+        app:backgroundTint="#2196F3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

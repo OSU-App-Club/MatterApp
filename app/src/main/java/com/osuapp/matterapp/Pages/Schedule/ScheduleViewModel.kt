@@ -1,15 +1,37 @@
 package com.osuapp.matterapp.Pages.Schedule
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import com.osuapp.matterapp.Pages.Groups.GroupsViewModel
 
-class ScheduleViewModel : ViewModel() {
+class ScheduleViewModel : ViewModel(), DefaultLifecycleObserver {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "Schedule Fragment"
+    val schedules = MutableLiveData<List<ScheduleListItem>>().apply {
+        value = listOf()
     }
 
-    val text: LiveData<String> = _text
+    // Each Device List Entity
+    class ScheduleListItem {
+        var time: String = ""
+        var enabled: Boolean = false
+
+        constructor(time: String, enabled: Boolean) {
+            this.time = time
+            this.enabled = enabled
+        }
+
+        constructor()
+    }
+
+    override fun onCreate(owner: LifecycleOwner) {
+        super.onCreate(owner)
+
+        val schedules = mutableListOf<ScheduleListItem>()
+        schedules.add(ScheduleListItem("12:00 AM", true))
+        schedules.add(ScheduleListItem("1:00 AM", false))
+        schedules.add(ScheduleListItem("2:00 AM", true))
+        schedules.add(ScheduleListItem("3:00 AM", false))
+
+        this.schedules.postValue(schedules)
+    }
 
 }

@@ -203,8 +203,6 @@ constructor(
             }
     }
 
-
-
     fun startDevicesPeriodicPing() {
         Timber.d(
             "${LocalDateTime.now()} startDevicesPeriodicPing every $PERIODIC_UPDATE_INTERVAL_HOME_SCREEN_SECONDS seconds")

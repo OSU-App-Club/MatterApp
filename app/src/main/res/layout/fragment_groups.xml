@@ -4,46 +4,84 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Pages.Groups.GroupsFragment">
+    tools:context=".Pages.Devices.MatterDeviceFragment">
 
     <TextView
-        android:id="@+id/matterDevicesTextHeader"
+        android:id="@+id/matter_devices_text_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Groups"
-        android:textAlignment="textStart"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textSize="20sp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="@string/title_groups"
+        android:textAlignment="viewStart"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/title_groups" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addGroupsBtn"
+    <Spinner
+        android:id="@+id/groupsSpinner"
+        android:minWidth="150dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:clickable="true"
-        android:contentDescription="@string/add_a_new_group"
-        android:focusable="true"
-        android:src="@android:drawable/ic_input_add"
-        app:layout_constraintBottom_toBottomOf="@+id/groupsList"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_height="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toStartOf="@+id/editGroupBtn"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/matter_devices_text_header" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/groupsList"
-        android:layout_width="410dp"
-        android:layout_height="465dp"
+        android:id="@+id/group_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
+        android:background="#A1FFFFFF"
+        android:nestedScrollingEnabled="false"
+        app:layoutManager="GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/matterDevicesTextHeader"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/groupsSpinner"
+        app:layout_constraintVertical_bias="0.0"
+        app:spanCount="3"
+        tools:itemCount="6"
+        tools:listitem="@layout/devices_list_item" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_group_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:clickable="true"
+        android:contentDescription="@string/add_a_new_device"
+        android:focusable="true"
+        android:src="@android:drawable/ic_input_add"
+        app:backgroundTint="#2196F3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white" />
+
+    <android.widget.Button
+        android:id="@+id/editGroupBtn"
+        android:background="@drawable/btn_edit"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:text="\t\tEdit Group"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="@+id/groupsSpinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/groupsSpinner"
+        android:drawableLeft="@drawable/ic_baseline_edit_24"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

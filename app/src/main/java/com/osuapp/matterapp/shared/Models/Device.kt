@@ -3,10 +3,11 @@ package shared.Models
 import android.util.Log
 import com.google.gson.Gson
 import org.json.JSONObject
+import java.io.Serializable
 
 class Device (
     data: JSONObject
-) {
+) : Serializable {
 
     /************ Utilities ************/
     private val TAG = Device::class.java.simpleName

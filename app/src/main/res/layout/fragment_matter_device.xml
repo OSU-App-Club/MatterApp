@@ -10,8 +10,9 @@
         android:id="@+id/matter_devices_text_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
         android:text="@string/title_devices"
         android:textAlignment="viewStart"
         android:textSize="24sp"
@@ -21,46 +22,36 @@
         tools:text="@string/title_devices" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/devices_list"
+        android:id="@+id/devicesList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
         android:background="#A1FFFFFF"
         android:nestedScrollingEnabled="false"
         app:layoutManager="GridLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/matter_devices_text_header"
         app:spanCount="3"
-        tools:itemCount="3"
+        tools:itemCount="9"
         tools:listitem="@layout/devices_list_item" />
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_devices_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:clickable="true"
+        android:contentDescription="@string/add_a_new_device"
+        android:focusable="true"
+        android:src="@android:drawable/ic_input_add"
+        app:backgroundTint="#2196F3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_devices_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="80dp"
-            android:clickable="true"
-            android:contentDescription="@string/add_a_new_device"
-            android:focusable="true"
-            android:src="@android:drawable/ic_input_add"
-            app:backgroundTint="#2196F3" />
-
-    </RelativeLayout>
+        app:tint="@color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
