@@ -212,30 +212,34 @@ constructor(
 
     private fun runDevicesPeriodicPing() {
         viewModelScope.launch {
-            while (devicesPeriodicPingEnabled) {
-                // For each ne of the real devices
-                val devicesList = devicesRepository.getAllDevices().devicesList
-                devicesList.forEach { device ->
-                    if (device.name.startsWith(DUMMY_DEVICE_NAME_PREFIX)) {
-                        return@forEach
+            try {
+                while (devicesPeriodicPingEnabled) {
+                    // For each ne of the real devices
+                    val devicesList = devicesRepository.getAllDevices().devicesList
+                    devicesList.forEach { device ->
+                        if (device.name.startsWith(DUMMY_DEVICE_NAME_PREFIX)) {
+                            return@forEach
+                        }
+                        Timber.d("runDevicesPeriodicPing deviceId [${device.deviceId}]")
+                        var isOn = clustersHelper.getDeviceStateOnOffCluster(device.deviceId, 1)
+                        val isOnline: Boolean
+                        if (isOn == null) {
+                            Timber.e("runDevicesPeriodicUpdate: flakiness with mDNS")
+                            isOn = false
+                            isOnline = false
+                        } else {
+                            isOnline = true
+                        }
+                        Timber.d("runDevicesPeriodicPing deviceId [${device.deviceId}] [${isOnline}] [${isOn}]")
+                        // done: only need to do it if state has changed
+                        devicesStateRepository.updateDeviceState(
+                            device.deviceId, isOnline = isOnline, isOn = isOn
+                        )
                     }
-                    Timber.d("runDevicesPeriodicPing deviceId [${device.deviceId}]")
-                    var isOn = clustersHelper.getDeviceStateOnOffCluster(device.deviceId, 1)
-                    val isOnline: Boolean
-                    if (isOn == null) {
-                        Timber.e("runDevicesPeriodicUpdate: flakiness with mDNS")
-                        isOn = false
-                        isOnline = false
-                    } else {
-                        isOnline = true
-                    }
-                    Timber.d("runDevicesPeriodicPing deviceId [${device.deviceId}] [${isOnline}] [${isOn}]")
-                    // done: only need to do it if state has changed
-                    devicesStateRepository.updateDeviceState(
-                        device.deviceId, isOnline = isOnline, isOn = isOn
-                    )
+                    delay(PERIODIC_UPDATE_INTERVAL_HOME_SCREEN_SECONDS * 1000L)
                 }
-                delay(PERIODIC_UPDATE_INTERVAL_HOME_SCREEN_SECONDS * 1000L)
+            } catch (e: Exception) {
+                Timber.e(e)
             }
         }
     }
@@ -251,6 +255,17 @@ constructor(
                 Timber.d("Handling real device")
                 clustersHelper.setOnOffDeviceStateOnOffCluster(deviceUiModel.device.deviceId, isOn, 1)
                 devicesStateRepository.updateDeviceState(deviceUiModel.device.deviceId, true, isOn)
+            }
+        }
+    }
+
+    fun removeDevice(deviceId: Long) {
+        Timber.d("**************** remove device ****** [${deviceId}]")
+        viewModelScope.launch {
+            try {
+                devicesRepository.removeDevice(deviceId)
+            } catch (e: Exception) {
+                Timber.e(e)
             }
         }
     }

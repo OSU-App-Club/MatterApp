@@ -44,6 +44,8 @@ class MatterDevicesAdapter(var devices : List<MatterDeviceViewModel.DevicesListI
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val device = devices[position]
 
+//        Timber.i("device is online: ${device.online}")
+
         // set background tint color for itemView
         holder.cardView.setCardBackgroundColor(if (device.online) {
             // set hex color

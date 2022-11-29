@@ -106,6 +106,8 @@ class MatterDeviceViewModel : ViewModel(), DefaultLifecycleObserver {
                 if (device != null) {
                     device.state = matterDevice.isOn
                     device.online = matterDevice.isOnline
+
+//                    Timber.i("Device: ${matterDevice.device.deviceId}, State: ${matterDevice.isOn}, Online: ${matterDevice.isOnline}")
                 }
 
                 // update _devices

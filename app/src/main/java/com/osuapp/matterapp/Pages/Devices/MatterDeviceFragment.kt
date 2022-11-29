@@ -56,6 +56,9 @@ class MatterDeviceFragment : Fragment() {
         devicesListRecyclerView.adapter = MatterDevicesAdapter(listOf())
 
         matterDeviceViewModel.devices.observe(viewLifecycleOwner) { devices ->
+//            for (device in devices) {
+//                Timber.d("Device: ${device.label} is ${device.state}, online: ${device.online}")
+//            }
             devicesListRecyclerView.adapter = MatterDevicesAdapter(devices)
         }
 
@@ -69,14 +72,14 @@ class MatterDeviceFragment : Fragment() {
             // done: Andrew - Grab one of the devices from devicesUiModel and save in variable called deviceUiModel (done)
 //            localDevicesUiModel = devicesUiModel
 
-            if (devicesUiModel.devices.isNotEmpty()) {
-                Timber.i("devicesUiModel.devices is not empty: ${devicesUiModel.devices.count()}")
-//                deviceUiModel = devicesUiModel.devices[0]
-//                var deviceUiModel = devicesUiModel.devices[0]
-//                deviceUiModel.device.deviceId
-            } else {
-                Timber.i("devicesUiModel.devices is empty")
-            }
+//            if (devicesUiModel.devices.isNotEmpty()) {
+//                Timber.i("devicesUiModel.devices is not empty: ${devicesUiModel.devices.count()}")
+////                deviceUiModel = devicesUiModel.devices[0]
+////                var deviceUiModel = devicesUiModel.devices[0]
+////                deviceUiModel.device.deviceId
+//            } else {
+//                Timber.i("devicesUiModel.devices is empty")
+//            }
 
             matterDeviceViewModel.updateDeviceStates(devicesUiModel.devices)
             matterDeviceViewModel.addDevice(devicesUiModel.devices)

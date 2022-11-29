@@ -13,8 +13,8 @@
         android:id="@+id/cardView"
         android:foreground="?android:attr/selectableItemBackground"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#B0B1B1"
+        android:layout_height="150dp"
+        app:cardBackgroundColor="#B0B1B1"
         android:orientation="vertical"
         app:cardCornerRadius="30dp"
         app:contentPadding="0dp"
@@ -45,13 +45,15 @@
             <TextView
                 android:id="@+id/device_label"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="10dp"
                 android:text="Device"
                 android:textAlignment="center"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="@+id/device_image"
-                app:layout_constraintStart_toStartOf="@+id/device_image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/device_image" />
 
             <TextView

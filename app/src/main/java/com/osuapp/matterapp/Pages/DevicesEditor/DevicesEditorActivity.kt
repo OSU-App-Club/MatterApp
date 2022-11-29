@@ -8,15 +8,19 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import com.osuapp.matterapp.PERIODIC_UPDATE_INTERVAL_HOME_SCREEN_SECONDS
 import com.osuapp.matterapp.Pages.Devices.MatterDeviceViewModel
 import com.osuapp.matterapp.Pages.Groups.GroupsAdapter
 import com.osuapp.matterapp.Pages.MatterPages.DeviceUiModel
 import com.osuapp.matterapp.Pages.MatterPages.DevicesUiModel
 import com.osuapp.matterapp.Pages.MatterPages.MatterActivityViewModel
 import com.osuapp.matterapp.R
+import com.osuapp.matterapp.TaskStatus
 import com.osuapp.matterapp.databinding.FragmentDevicesEditorBinding
+import com.osuapp.matterapp.isMultiAdminCommissioning
 import dagger.hilt.android.AndroidEntryPoint
 import shared.Models.Device
 import timber.log.Timber
@@ -139,14 +143,19 @@ class DevicesEditorActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+
+        Timber.d("*** Main ***")
+        if (PERIODIC_UPDATE_INTERVAL_HOME_SCREEN_SECONDS != -1) {
+            Timber.d("Starting periodic ping on devices")
+            viewModel.startDevicesPeriodicPing()
+        }
     }
 
     override fun onPause() {
         super.onPause()
-    }
 
-    override fun onDestroy() {
-        super.onDestroy()
+        Timber.d("onPause(): Stopping periodic ping on devices")
+        viewModel.stopDevicesPeriodicPing()
     }
 
     private fun pageLoadFail(msg: String) {
@@ -203,6 +212,7 @@ class DevicesEditorActivity : AppCompatActivity() {
         // Handle item selection
         return when (item.itemId) {
             R.id.delete_device -> {
+                viewModel.removeDevice(deviceId.toLong())
                 devicesEditorViewModel.deleteDevice(deviceId)
                 goToPreviousPage()
                 true

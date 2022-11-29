@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.osuapp.matterapp.R
+import timber.log.Timber
 
 class GroupsAdapter(var devices : List<GroupsViewModel.DevicesListItem>)
     : RecyclerView.Adapter<GroupsAdapter.ViewHolder>() {
@@ -41,6 +42,8 @@ class GroupsAdapter(var devices : List<GroupsViewModel.DevicesListItem>)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val device = devices[position]
+
+//        Timber.i("device is online: ${device.online}")
 
         // set background tint color for itemView
         holder.cardView.setCardBackgroundColor(if (device.online) {

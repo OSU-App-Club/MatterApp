@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.osuapp.matterapp.PERIODIC_UPDATE_INTERVAL_HOME_SCREEN_SECONDS
 import com.osuapp.matterapp.Pages.Devices.MatterDevicesAdapter
 import com.osuapp.matterapp.Pages.GroupsEditor.GroupsEditorActivity
 import com.osuapp.matterapp.Pages.MatterPages.DevicesUiModel
@@ -80,6 +81,9 @@ class GroupsFragment : Fragment() {
         }
 
         matterGroupsViewModel.selectedGroup.observe(viewLifecycleOwner) {
+            if (it >= matterGroupsViewModel.groups.value!!.size) {
+                return@observe
+            }
             groupsSpinner.setSelection(it)
         }
 
@@ -121,8 +125,21 @@ class GroupsFragment : Fragment() {
         return root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onResume() {
+        super.onResume()
+
+        Timber.d("*** Main ***")
+        if (PERIODIC_UPDATE_INTERVAL_HOME_SCREEN_SECONDS != -1) {
+            Timber.d("Starting periodic ping on devices")
+            viewModel.startDevicesPeriodicPing()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        Timber.d("onPause(): Stopping periodic ping on devices")
+        viewModel.stopDevicesPeriodicPing()
     }
 
 }

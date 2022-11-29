@@ -1,5 +1,6 @@
 package com.osuapp.matterapp.Pages.GroupsEditor
 
+import android.bluetooth.BluetoothClass.Device
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,9 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.osuapp.matterapp.R
 
-class GroupsEditorAdapter(var devicesInGroup : MutableList<GroupsEditorViewModel.DevicesListItem>)
+class GroupsEditorAdapter(var devicesInGroup : List<GroupsEditorViewModel.DevicesListItem>,
+                          var onDeviceRemoved: ((deviceId: String) -> Unit)
+)
     : RecyclerView.Adapter<GroupsEditorAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -38,12 +41,15 @@ class GroupsEditorAdapter(var devicesInGroup : MutableList<GroupsEditorViewModel
 
         holder.name.text = device.name
         holder.removeBtn.setOnClickListener {
-            Toast.makeText(holder.itemView.context, "Remove ${device.name}", Toast.LENGTH_SHORT).show()
-            // remove from list
-            devicesInGroup.removeAt(position)
-            // update recycle view
-            notifyItemRemoved(position)
-            notifyItemRangeChanged(position, devicesInGroup.size)
+            try {
+//                Toast.makeText(holder.itemView.context, "Remove ${device.name}", Toast.LENGTH_SHORT)
+//                    .show()
+                val deviceId = devicesInGroup[position].id
+                onDeviceRemoved(deviceId)
+            } catch (e: Exception) {
+//                Toast.makeText(holder.itemView.context, "Error removing device", Toast.LENGTH_SHORT)
+//                    .show()
+            }
         }
     }
 }

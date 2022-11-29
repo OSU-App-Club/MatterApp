@@ -92,19 +92,23 @@ class GroupsViewModel : ViewModel(), DefaultLifecycleObserver {
 //                Timber.i("Devices: ${devices.value}")
 
                 // get list of groups from deviceList
-                val groupList = mutableListOf<String>()
+                var groupList = mutableListOf<String>()
                 devicesList.forEach {
                     // merge with existing list
                     groupList.addAll(it.getDeviceGroups())
                 }
                 // remove duplicates
-                groupList.distinct()
+                groupList = groupList.distinct().toMutableList()
                 // send event to update Groups View
                 groups.postValue(groupList)
 
-                selectedGroup.postValue(0)
+                if (selectedGroup.value!! >= groupList.size) {
+                    selectedGroup.postValue(0)
+                } else {
+                    selectedGroup.postValue(selectedGroup.value!!)
+                }
 
-                getDevicesByGroup(groupList[0])
+                getDevicesByGroup(groupList[selectedGroup.value!!])
 
                 loadedList = true
             } catch (e : Exception) {
@@ -115,6 +119,8 @@ class GroupsViewModel : ViewModel(), DefaultLifecycleObserver {
     }
 
     fun getDevicesByGroup(group: String) {
+        selectedGroup.postValue(groups.value?.indexOf(group))
+
         val devices = mutableListOf<DevicesListItem>()
         devicesList.forEach {
             if (it.getDeviceGroups().contains(group)) {

@@ -32,14 +32,15 @@ class GroupsEditorActivity : AppCompatActivity() {
 
         val extras: Bundle? = intent.extras
         val groupName = extras?.getString("groupName")
-        var devices : List<Device> = extras?.getSerializable("devices") as List<Device>
+        val devices: List<Device> = extras?.getSerializable("devices") as List<Device>
         groupsEditorViewModel.initialDevices.value = devices
         groupsEditorViewModel.currentDevices.value = devices
 
 //        for (device in devices) {
 //            Timber.i("Device rcvd: ${device.id}, ${device.name}")
 //        }
-        groupsEditorViewModel.groupName.value = groupName
+        groupsEditorViewModel.initialGroupName.value = groupName
+        groupsEditorViewModel.currentGroupName.value = groupName
 
         // update text
         val name = _binding.nameFieldLayout
@@ -48,18 +49,11 @@ class GroupsEditorActivity : AppCompatActivity() {
         // prepare the recyclerview
         val recyclerView: RecyclerView = _binding.deviceList
         recyclerView.layoutManager = GridLayoutManager(this, 1)
-        recyclerView.adapter = GroupsEditorAdapter(mutableListOf())
+        recyclerView.adapter = GroupsEditorAdapter(listOf(), groupsEditorViewModel::onDeviceRemove)
 
         groupsEditorViewModel.devicesInGroup.observe(this) {
-//            for (device in it) {
-//                // update groupsEditorViewModel.currentDevices to remove this group
-//                val currentDevice = groupsEditorViewModel.currentDevices.value?.find { it.getDeviceId() == device.id }
-//                val newGroups = currentDevice?.getDeviceGroups()
-//                newGroups?.remove(groupName)
-//                currentDevice?.setDeviceGroups(newGroups?.toTypedArray()!!)
-//            }
-
-            recyclerView.adapter = GroupsEditorAdapter(it)
+            Timber.i("New devices in group: ${it.size}")
+            recyclerView.adapter = GroupsEditorAdapter(it, groupsEditorViewModel::onDeviceRemove)
         }
 
         groupsEditorViewModel.setDevicesInGroup(devices)
@@ -67,21 +61,10 @@ class GroupsEditorActivity : AppCompatActivity() {
         // add button
         val addBtn = _binding.addDeviceToGroupBtn
         addBtn.setOnClickListener {
-//            for (device in devices) {
-//                Timber.i("Device rcvd: ${device.getDeviceGroups()}, ${device.getDeviceId()}")
-//            }
-            groupsEditorViewModel.removeGroupFromDevices(devices)
-//            for (device in devices) {
-//                Timber.i("Device rcvd: ${device.getDeviceGroups()}, ${device.getDeviceId()}")
-//            }
-
             val intent = Intent(this, GroupsEditorActivityPart2::class.java)
             intent.putExtra("groupName", groupName)
             intent.putExtra("devices", groupsEditorViewModel.currentDevices.value as Serializable)
             startActivityForResult(intent, 0)
-
-            // After activity, update allDevices list (so have new groups)
-//            devices = intent.getSerializableExtra("devices") as List<Device>
         }
 
         // cancel button
@@ -93,7 +76,7 @@ class GroupsEditorActivity : AppCompatActivity() {
         // save button
         val saveBtn = _binding.saveBtn
         saveBtn.setOnClickListener {
-            groupsEditorViewModel.removeGroupFromDevices(devices)
+            groupsEditorViewModel.currentGroupName.value = name.editText?.text.toString().trim()
             groupsEditorViewModel.save()
             finish()
         }
@@ -110,6 +93,7 @@ class GroupsEditorActivity : AppCompatActivity() {
                 for (device in devices) {
                     Timber.i("Device rcvd: ${device.getDeviceId()}, ${device.getDeviceGroups()}")
                 }
+                groupsEditorViewModel.currentDevices.value = devices
                 groupsEditorViewModel.setDevicesInGroup(devices)
             }
         }

@@ -240,7 +240,7 @@ const val SETUP_PIN_CODE = 11223344L
 
 // Period updates interval.
 // Set to -1 to disable the periodic update calls.
-const val PERIODIC_UPDATE_INTERVAL_HOME_SCREEN_SECONDS = 10
+const val PERIODIC_UPDATE_INTERVAL_HOME_SCREEN_SECONDS = 2
 const val PERIODIC_UPDATE_INTERVAL_DEVICE_SCREEN_SECONDS = 2
 
 // Whether the device should be queried right after commissioning.
